@@ -1,0 +1,26 @@
+name: "Greet someone and Farewell"
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Name of the person to greet"
+        required: true
+        default: "Mona"
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Greet someone
+        run: echo "Hello, ${{ github.event.inputs.name }}!"
+
+  farewell:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Farewell someone
+        run: echo "Goodbye, ${{ github.event.inputs.name }}!"
