@@ -1,44 +1,27 @@
 version: 2.1
 
-executors:
-  default:
-    docker:
-      - image: cimg/base:current
-
-parameters:
-  name:
-    type: string
-    default: "Mona"
-    description: "Name of the person to greet"
+commands:
+  print:
+    parameters:
+      message:
+        type: string
+    steps:
+      - run: echo << parameters.message >>
 
 jobs:
-  greet:
-    executor: default
+  daily-message:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: large
     parameters:
-      is_happy:
-        type: boolean
+      message:
+        type: string
     steps:
-      - checkout
-      - run:
-          name: Greet someone
-          command: |
-            echo "Hello, << pipeline.parameters.name >>! Are you happy? << parameters.is_happy >>"
-
-  farewell:
-    executor: default
-    parameters:
-      farewell_message:
-        type: enum
-        enum: ["Goodbye", "See you later", "Take care"]
-    steps:
-      - checkout
-      - run:
-          name: Farewell someone
-          command: |
-            echo "<< parameters.farewell_message >>, << pipeline.parameters.name >>!"
+      - print:
+          message: Printing << parameters.message >>
 
 workflows:
-  greet-and-farewell:
+  my-workflow:
     jobs:
-      - greet:
-          is_happy: << pipeline.parameters.is_happy >>
+      - daily-message:
+         message: echo << parameters.message >>
