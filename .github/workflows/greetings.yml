@@ -7,6 +7,14 @@ on:
         description: "Name of the person to greet"
         required: true
         default: "Mona"
+      farewell_message:
+        description: "Select a farewell message"
+        required: true
+        default: "Goodbye"
+        options:
+          - "Goodbye"
+          - "See you later"
+          - "Take care"
 
 jobs:
   greet:
@@ -23,4 +31,4 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Farewell someone
-        run: echo "Goodbye, ${{ github.event.inputs.name }}!"
+        run: echo "${{ github.event.inputs.farewell_message }}, ${{ github.event.inputs.name }}!"
