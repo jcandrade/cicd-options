@@ -1,4 +1,4 @@
-name: "Greet someone and Farewell"
+name: "Greet someone and Farewell v2"
 
 on:
   workflow_dispatch:
