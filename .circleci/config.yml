@@ -10,44 +10,35 @@ parameters:
     type: string
     default: "Mona"
     description: "Name of the person to greet"
-  farewell_message:
-    type: enum
-    enum: ["Goodbye", "See you later", "Take care"]
-    description: "Select a farewell message"
-  is_happy:
-    type: boolean
-    default: false
-    description: "Is the person happy?"
 
 jobs:
   greet:
+    executor: default
+    parameters:
+      is_happy:
+        type: boolean
     steps:
       - checkout
       - run:
           name: Greet someone
           command: |
-            echo "Hello, << parameters.name >>! Are you happy? << parameters.is_happy >>"
+            echo "Hello, << pipeline.parameters.name >>! Are you happy? << parameters.is_happy >>"
 
   farewell:
+    executor: default
+    parameters:
+      farewell_message:
+        type: enum
+        enum: ["Goodbye", "See you later", "Take care"]
     steps:
       - checkout
       - run:
           name: Farewell someone
           command: |
-            echo "<< parameters.farewell_message >>, << parameters.name >>!"
+            echo "<< parameters.farewell_message >>, << pipeline.parameters.name >>!"
 
 workflows:
   greet-and-farewell:
     jobs:
       - greet:
-          name: "Greet"
-          parameters:
-            name: "Mona"
-            is_happy: true
-      - farewell:
-          name: "Farewell"
-          requires:
-            - greet
-          parameters:
-            name: "Mona"
-            farewell_message: "Goodbye"
+          is_happy: << pipeline.parameters.is_happy >>
