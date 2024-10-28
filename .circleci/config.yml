@@ -1,27 +1,35 @@
 version: 2.1
 
-commands:
-  print:
-    parameters:
-      message:
-        type: string
-    steps:
-      - run: echo << parameters.message >>
+parameters:
+  action:
+    type: enum
+    enum: [build, report]
+    default: build
 
 jobs:
-  daily-message:
-    machine:
-      image: ubuntu-2004:current
-    resource_class: large
-    parameters:
-      message:
-        type: string
+  build:
+    docker:
+      - image: cimg/base:2023.11
     steps:
-      - print:
-          message: Printing << parameters.message >>
+      - checkout
+      - run: ./run-tests.sh
+
+  report:
+    docker:
+      - image: cimg/base:2023.11
+    steps:
+      - checkout
+      - run: ./create-report.sh
 
 workflows:
-  my-workflow:
+  build:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
-      - daily-message:
-         message: echo << parameters.message >>
+      - build
+
+  report:
+    when:
+      equal: [ report, << pipeline.parameters.action >> ]
+    jobs:
+      - report
