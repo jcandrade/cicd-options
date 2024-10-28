@@ -17,7 +17,7 @@ on:
           - "Take care"
       is_happy:
         type: boolean
-        description: True or False
+        description: "Is the person happy?"
 
 jobs:
   greet:
