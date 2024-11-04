@@ -1,0 +1,21 @@
+language: bash
+
+env:
+  global:
+    - GREETING_NAME=${GREETING_NAME:-"Mona"}
+    - FAREWELL_MESSAGE=${FAREWELL_MESSAGE:-"Goodbye"}
+    - IS_HAPPY=${IS_HAPPY:-true}
+
+jobs:
+  include:
+    - stage: greet
+      script:
+        - echo "Hello, $GREETING_NAME! Are you happy? $IS_HAPPY"
+    
+    - stage: farewell
+      script:
+        - echo "$FAREWELL_MESSAGE, $GREETING_NAME!"
+
+stages:
+  - greet
+  - farewell
